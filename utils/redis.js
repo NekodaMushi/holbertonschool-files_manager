@@ -24,7 +24,8 @@ class RedisClient {
 
   async set(key) {
     try {
-      this.client.setex(key, duration, value);
+      const setKey = promisify(this.client.set).bind(this.client);
+      return setKey(key, value, "EX", duration);
     } catch (err) {
       console.log("Redis set error: ", err);
     }
